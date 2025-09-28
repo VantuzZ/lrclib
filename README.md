@@ -23,15 +23,29 @@ Server will be available at http://0.0.0.0:3300
 
 ## Setup with Podman/Docker
 
-### Basic
+### Using Pre-built Images
 
-Build the image:
+Pre-built Docker images are automatically published to GitHub Container Registry and available at:
+- `ghcr.io/vantuzz/lrclib/lrclib-rs:latest` - latest version from main branch
+- `ghcr.io/vantuzz/lrclib/lrclib-rs:<version>` - specific version tags
+
+Run the pre-built container:
+
+```
+podman run --rm -it -d -v lrclib-data:/data -p 3300:3300 -e LRCLIB_LOG=info --name lrclib-rs ghcr.io/vantuzz/lrclib/lrclib-rs:latest
+```
+
+Server will be available at http://0.0.0.0:3300
+
+### Building Locally
+
+Build the image locally:
 
 ```
 podman build -t lrclib-rs:latest -f Dockerfile .
 ```
 
-Run the container:
+Run the locally built container:
 
 ```
 podman run --rm -it -d -v lrclib-data:/data -p 3300:3300 -e LRCLIB_LOG=info --name lrclib-rs lrclib-rs:latest
@@ -44,7 +58,7 @@ Server will be available at http://0.0.0.0:3300
 Run the following command to directly interact with the database in command line:
 
 ```
-podman run --rm -it -v lrclib-data:/data lrclib-rs:latest sqlite3 /data/db.sqlite3
+podman run --rm -it -v lrclib-data:/data ghcr.io/vantuzz/lrclib/lrclib-rs:latest sqlite3 /data/db.sqlite3
 ```
 
 ### Quadlet
@@ -62,7 +76,7 @@ The example content of `lrclib.container`:
 
 ```
 [Container]
-Image=lrclib-rs:latest
+Image=ghcr.io/vantuzz/lrclib/lrclib-rs:latest
 PublishPort=3300:3300
 Volume=lrclib-data:/data
 ContainerName=lrclib-rs

@@ -1,4 +1,4 @@
-FROM docker.io/rust:1.78-alpine3.19 as chef
+FROM docker.io/rust:1.78-alpine3.19 AS chef
 RUN apk add --no-cache alpine-sdk
 RUN cargo install cargo-chef
 WORKDIR /usr/src/lrclib
@@ -14,7 +14,7 @@ COPY . .
 RUN cargo build --release --workspace
 
 FROM alpine:3.19
-RUN apk add --no-cache sqlite
+RUN apk add --no-cache sqlite3
 COPY --from=builder /usr/src/lrclib/target/release/lrclib /usr/local/bin/lrclib
 RUN mkdir /data
 EXPOSE 3300
